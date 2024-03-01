@@ -6,7 +6,7 @@ import com.example.chattraductor.data.repository.local.chat.DbChat
 import com.example.chattraductor.data.repository.local.user.DbUser
 import java.util.Date
 
-@Entity(tableName = "group_user",
+@Entity(tableName = "user_chat",
     primaryKeys = ["userId1", "userId2"],
     foreignKeys = [
         ForeignKey(

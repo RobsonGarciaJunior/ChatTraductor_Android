@@ -48,7 +48,10 @@ class ChatViewModel(private val localChatRepository: RoomChatDataSource,
         private val _joinChat = MutableLiveData<Resource<Int>>()
         val joinChat : LiveData<Resource<Int>> get() = _joinChat
 
-
+    private val _text = MutableLiveData<String>().apply {
+        value = "This is gallery Fragment"
+    }
+    val text: LiveData<String> = _text
     init {
         viewModelScope.launch {
             getChats(1)
@@ -62,34 +65,16 @@ class ChatViewModel(private val localChatRepository: RoomChatDataSource,
 
         ///////////////////////////////////////////////////////////////////////////////////
         // FUNCIONES CREATE GROUP
-        fun onCreate(name:String, chatEnumType: String, idAdmin: Int) {
+        fun onCreate(name:String) {
+            val newChat = Chat(null, name)
             viewModelScope.launch {
-                        createdChat.data?.let { createLocal(it) }
-                        _create.value = createdChat
+                        _create.value = createLocal(newChat)
                     }
-
         }
 
-        private suspend fun createLocal(chat : Chat) : Resource<Void> {
+        private suspend fun createLocal(chat : Chat) : Resource<Chat> {
             return withContext(Dispatchers.IO) {
-                localChatRepository.createChatAsAdmin(chat)
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////
-
-        // FUNCIONES UNIRSE A UN GRUPO
-
-        fun onJoinChat(idChat: Int) {
-            viewModelScope.launch {
-                //pasamos el userchatinfo
-                _joinChat.value = joinChatLocal(joinUser.data)
-            }
-        }
-
-        private suspend fun joinChatLocal(userChatInfo: UserChatInfo) : Resource<Int> {
-            return withContext(Dispatchers.IO) {
-                localChatRepository.addUserToChat(userChatInfo)
+                localChatRepository.createChat(chat)
             }
         }
 

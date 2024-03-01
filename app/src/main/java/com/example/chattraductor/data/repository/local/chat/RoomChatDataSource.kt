@@ -15,6 +15,11 @@ class RoomChatDataSource : CommonChatRepository {
         val response = chatDao.getChats(userId).map { it.toChat() }
         return Resource.success(response)
     }
+
+    override suspend fun createChat(chat: Chat): Resource<Chat> {
+        TODO("Not yet implemented")
+        return Resource.success(chat)
+    }
 }
 
 fun DbChat.toChat() = Chat(id, name)
@@ -22,6 +27,6 @@ fun Chat.toDbChat() = DbChat(id, name)
 
 @Dao
 interface ChatDao {
-    @Query("SELECT * FROM chats ORDER BY id")
+    @Query("SELECT * FROM chats WHERE id IN (SELECT chatId FROM user_chat WHERE userId1 = :userId OR userId2 = :userId) ORDER BY id")
     suspend fun getChats(userId:Int): List<DbChat>
 }
