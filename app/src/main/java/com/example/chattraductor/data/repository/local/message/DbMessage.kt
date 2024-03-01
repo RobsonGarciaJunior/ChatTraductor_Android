@@ -18,7 +18,7 @@ import java.util.Date
     ForeignKey(
         entity = DbUser::class,
         parentColumns = ["id"],
-        childColumns = ["userId"],
+        childColumns = ["senderId"],
         onDelete = ForeignKey.NO_ACTION
     )
 ])
@@ -26,5 +26,5 @@ data class DbMessage(
     @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "text") val text: String,
     @ColumnInfo(name = "chatId") val chatId: Int,
-    @ColumnInfo(name = "userId") val userId: Int
+    @ColumnInfo(name = "senderId") val senderId: Int
 )

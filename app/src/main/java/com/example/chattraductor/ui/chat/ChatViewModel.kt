@@ -48,14 +48,6 @@ class ChatViewModel(private val localChatRepository: RoomChatDataSource,
         private val _joinChat = MutableLiveData<Resource<Int>>()
         val joinChat : LiveData<Resource<Int>> get() = _joinChat
 
-        private val _addUserToChat = MutableLiveData<Resource<Int>>()
-        val addUserToChat : LiveData<Resource<Int>> get() = _addUserToChat
-
-        private val _leaveChat = MutableLiveData<Resource<UserChatInfo>>()
-        val leaveChat : LiveData<Resource<UserChatInfo>> get() = _leaveChat
-
-        private val _throwOutFromChat = MutableLiveData<Resource<Int>>()
-        val throwOutFromChat : LiveData<Resource<Int>> get() = _throwOutFromChat
 
     init {
         viewModelScope.launch {
@@ -84,37 +76,6 @@ class ChatViewModel(private val localChatRepository: RoomChatDataSource,
             }
         }
 
-        ///////////////////////////////////////////////////////////////////////////////
-        // FUNCIONES DELETE GROUP
-
-        fun onDelete(chat: Chat) {
-            viewModelScope.launch {
-                _delete.value = deleted.data?.let { softDeleteLocal(it) }
-                _delete.value = Resource.error("Ha ocurrido un error, comprueba tu conexión a internet")
-                }
-        }
-
-        private suspend fun softDeleteLocal(chat: Chat) : Resource<Void>? {
-            return withContext(Dispatchers.IO) {
-                localChatRepository.softDeleteChat(chat)
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////
-        // FUNCIONES AÑADIR USUARIO A UN GRUPO
-        fun onAddUserToChat(idChat: Int, idUser: Int) {
-            viewModelScope.launch {
-                _addUserToChat.value = addUserToChatLocal(userAdded.data)
-
-            }
-        }
-
-        private suspend fun addUserToChatLocal(userChatInfo: UserChatInfo) : Resource<Int> {
-            return withContext(Dispatchers.IO) {
-                localChatRepository.addUserToChat(userChatInfo)
-            }
-        }
-
         //////////////////////////////////////////////////////////////////////////////////////
 
         // FUNCIONES UNIRSE A UN GRUPO
@@ -131,21 +92,6 @@ class ChatViewModel(private val localChatRepository: RoomChatDataSource,
                 localChatRepository.addUserToChat(userChatInfo)
             }
         }
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        // FUNCIONES SALIR DE UN GRUPO
-
-        fun onLeaveChat(idChat: Int, idUser: Int) {
-            viewModelScope.launch {
-                _leaveChat.value = leaveChatRemote(idChat)
-            }
-        }
-        private suspend fun leaveChatLocal(idChat: Int, idUser: Int) : Resource<Int> {
-            return withContext(Dispatchers.IO) {
-                localChatRepository.leaveChat(idChat, idUser)
-            }
-        }
-    }
 
     class RoomChatViewModelFactory(
         private val roomChatRepository: RoomChatDataSource,
