@@ -8,5 +8,5 @@ data class User (
     var id: Int?,
     val name: String,
     val surname: String,
-    val phone_number1: Int,
+    val phoneNumber1: Int,
     ): Parcelable

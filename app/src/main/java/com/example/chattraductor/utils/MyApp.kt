@@ -12,6 +12,7 @@ class MyApp: Application() {
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
+        lateinit var userPreferences: UserPreferences
         lateinit var db: MyAppRoomDataBase
         lateinit var appScope: CoroutineScope
         const val AUTHORIZATION_HEADER = "Authorization"
@@ -25,6 +26,7 @@ class MyApp: Application() {
     override fun onCreate(){
         super.onCreate()
         context = this
+        userPreferences = UserPreferences()
         appScope = CoroutineScope(Dispatchers.IO)
         db = Room
             .databaseBuilder(this, MyAppRoomDataBase::class.java, "chat-db")

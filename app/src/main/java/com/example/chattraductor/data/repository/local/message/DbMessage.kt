@@ -14,17 +14,18 @@ import java.util.Date
         parentColumns = ["id"],
         childColumns = ["chatId"],
         onDelete = ForeignKey.CASCADE
-    ),
+    )
+    /*,
     ForeignKey(
         entity = DbUser::class,
         parentColumns = ["id"],
         childColumns = ["senderId"],
         onDelete = ForeignKey.NO_ACTION
-    )
+    )*/
 ])
 data class DbMessage(
     @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "text") val text: String,
-    @ColumnInfo(name = "chatId") val chatId: Int,
-    @ColumnInfo(name = "senderId") val senderId: Int
+    @ColumnInfo(name = "senderId") val senderId: Int,
+    @ColumnInfo(name = "receiverId") val receiverId: Int
 )
