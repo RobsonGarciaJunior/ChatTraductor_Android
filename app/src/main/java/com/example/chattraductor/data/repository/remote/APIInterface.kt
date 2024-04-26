@@ -14,7 +14,7 @@ interface APIInterface {
 
     /*API HIBERNATE */
     @POST("auth/login")
-    suspend fun loginHibernate(@Body authRequest: AuthRequest) : Response<LoginUser>
+    suspend fun login(@Body authRequest: AuthRequest) : Response<LoginUser>
     @GET("messages/findAll/{id}")
     suspend fun getMessages(@Path("id") messageId: Int?) : Response<List<Message>>
     @GET("messages/chat/{chatId}")

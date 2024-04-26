@@ -8,21 +8,22 @@ import com.example.chattraductor.data.repository.local.chat.DbChat
 import com.example.chattraductor.data.repository.local.user.DbUser
 import java.util.Date
 
-@Entity(tableName = "messages", foreignKeys = [
+@Entity(tableName = "messages"
+/*foreignKeys = [
     ForeignKey(
         entity = DbChat::class,
         parentColumns = ["id"],
         childColumns = ["chatId"],
         onDelete = ForeignKey.CASCADE
-    )
+    )*/
     /*,
     ForeignKey(
         entity = DbUser::class,
         parentColumns = ["id"],
         childColumns = ["senderId"],
         onDelete = ForeignKey.NO_ACTION
-    )*/
-])
+    )
+]*/)
 data class DbMessage(
     @PrimaryKey(autoGenerate = true) val id: Int?,
     @ColumnInfo(name = "text") val text: String,

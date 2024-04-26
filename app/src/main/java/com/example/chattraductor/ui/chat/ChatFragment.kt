@@ -6,20 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.chattraductor.data.model.Chat
+import com.example.chattraductor.data.repository.local.PopulateLocalDataBase
 import com.example.chattraductor.databinding.FragmentChatBinding
-import com.example.chattraductor.databinding.FragmentGalleryBinding
 import com.example.chattraductor.utils.Resource
 
 class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var chat: Chat
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -31,7 +30,8 @@ class ChatFragment : Fragment() {
     ): View {
         val chatViewModel =
             ViewModelProvider(this).get(ChatViewModel::class.java)
-
+        lateinit var chat: Chat
+        val populateLocalDataBase = ViewModelProvider(this).get(PopulateLocalDataBase::class.java)
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         val root: View = binding.root
         chatAdapter = ChatAdapter(
@@ -45,6 +45,22 @@ class ChatFragment : Fragment() {
         chatViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
+        populateLocalDataBase.finish.observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    chatViewModel.updateChatList()
+                }
+
+                Resource.Status.ERROR -> {
+//                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+
+                Resource.Status.LOADING -> {
+                }
+
+            }
+        })
         chatViewModel.chat.observe(viewLifecycleOwner, Observer {
             Log.e("PruebasDia1", "ha ocurrido un cambio en la lista total")
             when (it.status) {
@@ -68,11 +84,11 @@ class ChatFragment : Fragment() {
         })
         return root
     }
+
     private fun onChatListClickItem(chat: Chat) {
-        this.chat = chat
-
-
+//        this.chat = chat
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

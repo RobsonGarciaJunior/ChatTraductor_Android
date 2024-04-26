@@ -8,14 +8,12 @@ import com.example.chattraductor.data.repository.local.message.DbMessage
 import com.example.chattraductor.data.repository.local.message.MessageDao
 import com.example.chattraductor.data.repository.local.user.DbUser
 import com.example.chattraductor.data.repository.local.user.UserDao
-import com.example.chattraductor.data.repository.local.userChat.DbUserChat
 
 @Database(
     entities = [
         DbChat::class,
         DbMessage::class,
-        DbUser::class,
-        DbUserChat::class],
+        DbUser::class],
     version = 1,
     exportSchema = false
 )
