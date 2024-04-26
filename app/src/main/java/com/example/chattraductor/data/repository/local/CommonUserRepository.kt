@@ -5,5 +5,5 @@ import com.example.chattraductor.utils.Resource
 
 interface CommonUserRepository {
     suspend fun getUsers() : Resource<List<User>>
-
+    suspend fun createUser(user: User) : Resource<User>
 }

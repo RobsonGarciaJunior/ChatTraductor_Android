@@ -53,7 +53,7 @@ class ChatFragment : Fragment() {
                         chatAdapter.submitList(it.data)
                         Log.d("ChatFragment", "Datos cargados correctamente: ${it.data}")
                     } else {
-                        Log.d("ChatFragment", "La lista de chats está vacía")
+                        Log.d("ChatFragment", "La lista de chats está vacía, haga login")
                     }
                 }
 

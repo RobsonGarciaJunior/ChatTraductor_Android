@@ -8,8 +8,9 @@ import com.example.chattraductor.data.repository.local.CommonChatRepository
 import com.example.chattraductor.data.repository.local.CommonMessageRepository
 import com.example.chattraductor.utils.MyApp
 import com.example.chattraductor.utils.Resource
+import java.util.Date
 
-class RoomChatDataSource : CommonMessageRepository {
+class RoomMessageDataSource : CommonMessageRepository {
 
     private val messageDao: MessageDao = MyApp.db.messageDao()
 
@@ -17,13 +18,31 @@ class RoomChatDataSource : CommonMessageRepository {
         val response = messageDao.getMessages(chatId).map { it.toMessage() }
         return Resource.success(response)
     }
-}
 
-fun DbMessage.toMessage() = Message(id, text, senderId, receiverId)
-fun Message.toDbMessage() = DbMessage(id, text, senderId, receiverId)
+    override suspend fun createMessage(message: Message): Resource<Message> {
+        val dbMessage = message.toDbMessage()
+        val dbMessageId = messageDao.createMessage(
+            dbMessage.id,
+            dbMessage.text,
+            dbMessage.senderId,
+            dbMessage.receiverId
+        )
+        message.id = dbMessageId.toInt()
+        return Resource.success(message)
+    }
 
-@Dao
-interface MessageDao {
-    @Query("SELECT * FROM chats ORDER BY id")
-    suspend fun getMessages(chatId:Int): List<DbMessage>
+    fun DbMessage.toMessage() = Message(id, text, senderId, receiverId)
+    fun Message.toDbMessage() = DbMessage(id, text, senderId, receiverId)
+
+    @Dao
+    interface MessageDao {
+        @Query("SELECT * FROM chats ORDER BY id")
+        suspend fun getMessages(chatId: Int): List<DbMessage>
+
+        @Query(
+            "INSERT INTO messages (id, text, senderId, receiverId) " +
+                    "VALUES (:id, :text, :senderId, :receiverId)"
+        )
+        suspend fun createMessage(id: Int?, text: String, senderId: Int?, receiverId: Int?): Long
+    }
 }

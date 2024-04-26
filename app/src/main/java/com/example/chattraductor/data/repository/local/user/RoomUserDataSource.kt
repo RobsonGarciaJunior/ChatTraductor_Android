@@ -1,6 +1,7 @@
 package com.example.chattraductor.data.repository.local.user
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.example.chattraductor.data.model.Chat
 import com.example.chattraductor.data.model.User
@@ -17,13 +18,21 @@ class RoomUserDataSource : CommonUserRepository {
         val response = userDao.getUsers().map { it.toUser() }
         return Resource.success(response)
     }
+
+    override suspend fun createUser(user: User): Resource<User> {
+        val dbUser = userDao.createUser(user.toDbUser())
+        user.id = dbUser.toInt()
+        return Resource.success(user)
+    }
 }
 
 fun DbUser.toUser() = User(id, name, surname, phoneNumber)
-fun User.toDbUser() = DbUser(id, name, surname, phone_number1)
+fun User.toDbUser() = DbUser(id, name, surname, phoneNumber1)
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users ORDER BY name")
     suspend fun getUsers(): List<DbUser>
+    @Insert
+    suspend fun createUser(dbUser: DbUser) : Long
 }
