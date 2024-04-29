@@ -20,7 +20,8 @@ import com.example.chattraductor.data.repository.local.user.UserDao
 
 abstract class MyAppRoomDataBase: RoomDatabase() {
     abstract fun chatDao(): ChatDao
-    abstract fun messageDao(): MessageDao
     abstract fun userDao(): UserDao
+    abstract fun messageDao(): MessageDao
+
 
 }

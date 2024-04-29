@@ -161,11 +161,9 @@ class PopulateLocalDataBase(
     }*/
 
     private suspend fun setAllMessages() {
-        Log.d("HOLA", "LLEGA AL SET")
         return withContext(Dispatchers.IO) {
             val allMessage = _allMessage.value?.data
             if (allMessage != null) {
-                Log.d("HOLA", "LLEGA AL IF")
                 for (messageResponse in allMessage) {
                     val message = Message(
                         messageResponse.id,

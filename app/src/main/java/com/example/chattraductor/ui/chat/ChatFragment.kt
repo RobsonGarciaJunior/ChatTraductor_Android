@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.chattraductor.data.model.Chat
+import com.example.chattraductor.data.model.User
 import com.example.chattraductor.data.repository.local.PopulateLocalDataBase
 import com.example.chattraductor.databinding.FragmentChatBinding
 import com.example.chattraductor.utils.Resource
@@ -17,7 +18,7 @@ import com.example.chattraductor.utils.Resource
 class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
-    private lateinit var chatAdapter: ChatAdapter
+    private lateinit var chatAdapter: UserAdapter
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,7 +35,7 @@ class ChatFragment : Fragment() {
         val populateLocalDataBase = ViewModelProvider(this).get(PopulateLocalDataBase::class.java)
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        chatAdapter = ChatAdapter(
+        chatAdapter = UserAdapter(
             ::onChatListClickItem
         )
 
@@ -85,7 +86,7 @@ class ChatFragment : Fragment() {
         return root
     }
 
-    private fun onChatListClickItem(chat: Chat) {
+    private fun onChatListClickItem(chat: User) {
 //        this.chat = chat
     }
 

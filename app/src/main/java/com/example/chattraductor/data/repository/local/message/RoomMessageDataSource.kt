@@ -31,14 +31,13 @@ class RoomMessageDataSource : CommonMessageRepository {
 
 fun DbMessage.toMessage() = Message(id, text, senderId, receiverId)
 fun Message.toDbMessage() = DbMessage(id, text, senderId, receiverId)
+
 @Dao
 interface MessageDao {
-    @Query("SELECT * FROM messages WHERE senderId = :senderId AND receiverId = :receiverId ORDER BY id")
-    suspend fun getMessages(senderId: Int?, receiverId: Int?): List<DbMessage>
+    @Query("SELECT * FROM messages WHERE senderId = :senderId OR receiverId = :receiverId ORDER BY id")
+    fun getMessages(senderId: Int?, receiverId: Int?): List<DbMessage>
 
     @Query(
-        "INSERT INTO messages (id, text, senderId, receiverId) " +
-                "VALUES (:id, :text, :senderId, :receiverId)"
-    )
-    suspend fun createMessage(id: Int?, text: String, senderId: Int?, receiverId: Int?): Long
+        "INSERT INTO messages (id, text, senderId, receiverId) VALUES (:id, :text, :senderId, :receiverId)")
+    fun createMessage(id: Int?, text: String, senderId: Int?, receiverId: Int?): Long
 }

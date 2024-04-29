@@ -26,13 +26,13 @@ class RoomUserDataSource : CommonUserRepository {
     }
 }
 
-fun DbUser.toUser() = User(id, name, surname, phoneNumber)
+fun DbUser.toUser() = User(id, name, surname, phoneNumber1)
 fun User.toDbUser() = DbUser(id, name, surname, phoneNumber1)
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users ORDER BY name")
-    suspend fun getUsers(): List<DbUser>
+    fun getUsers(): List<DbUser>
     @Insert
-    suspend fun createUser(dbUser: DbUser) : Long
+    fun createUser(dbUser: DbUser) : Long
 }

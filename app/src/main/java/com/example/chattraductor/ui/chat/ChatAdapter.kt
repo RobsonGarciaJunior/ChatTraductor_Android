@@ -6,20 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chattraductor.data.model.Chat
+import com.example.chattraductor.data.model.User
 import com.example.chattraductor.databinding.FragmentChatBinding
 
-class ChatAdapter (
-    private val onClickListener: (Chat) -> Unit
-) : ListAdapter<Chat, ChatAdapter.ChatViewHolder>(ChatDiffCallback()) {
+class UserAdapter (
+    private val onClickListener: (User) -> Unit
+) : ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding =
             FragmentChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ChatViewHolder(binding)
+        return UserViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ChatAdapter.ChatViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserAdapter.UserViewHolder, position: Int) {
         val chat = getItem(position)
         holder.bind(chat)
 
@@ -29,25 +29,25 @@ class ChatAdapter (
 
     }
 
-    inner class ChatViewHolder(private val binding: FragmentChatBinding) :
+    inner class UserViewHolder(private val binding: FragmentChatBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(chat: Chat) {
+        fun bind(chat: User) {
 
         }
     }
 
-    class ChatDiffCallback : DiffUtil.ItemCallback<Chat>() {
+    class UserDiffCallback : DiffUtil.ItemCallback<User>() {
 
-        override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Chat, newItem: Chat): Boolean {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return (oldItem.id == newItem.id
                     && oldItem.name == newItem.name
-                    && oldItem.chatter1 == newItem.chatter1
-                    && oldItem.chatter2 == newItem.chatter2)
+                    && oldItem.surname == newItem.surname
+                    && oldItem.phoneNumber1 == newItem.phoneNumber1)
         }
 
     }
