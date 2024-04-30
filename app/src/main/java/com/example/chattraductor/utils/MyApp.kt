@@ -10,16 +10,15 @@ import kotlinx.coroutines.Dispatchers
 
 class MyApp: Application() {
     companion object {
-        @SuppressLint("StaticFieldLeak")
+//        @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
         lateinit var userPreferences: UserPreferences
         lateinit var db: MyAppRoomDataBase
         lateinit var appScope: CoroutineScope
         const val AUTHORIZATION_HEADER = "Authorization"
-        const val API_SERVER = "https://10.5.7.31"
+        const val API_SERVER = "http://10.5.7.31"
         const val API_PORT = "8063"
         const val API_SOCKET_PORT = "8085"
-        const val DEFAULT_PASS = "elorrieta00"
         const val BEARER = "Bearer "
 
     }

@@ -1,7 +1,6 @@
 package com.example.chattraductor.ui.chat
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,9 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.chattraductor.data.model.Chat
 import com.example.chattraductor.data.model.User
-import com.example.chattraductor.data.model.UserChatInfo
-import com.example.chattraductor.data.repository.local.chat.RoomChatDataSource
 import com.example.chattraductor.data.repository.local.user.RoomUserDataSource
+import com.example.chattraductor.data.repository.remote.RemoteUserDataSource
 import com.example.chattraductor.utils.MyApp
 import com.example.chattraductor.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ChatViewModel(
-    private val localChatRepository: RoomUserDataSource,
+    private val remoteUserRepository: RemoteUserDataSource,
     private var context: Context
 ) : ViewModel() {
 
@@ -39,13 +37,13 @@ class ChatViewModel(
     
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+        value = "CONTACTS"
     }
     val text: LiveData<String> = _text
 
     init {
         viewModelScope.launch {
-            getChats()
+           _chat.value = getChats()
         }
     }
 
@@ -61,7 +59,7 @@ class ChatViewModel(
 
     private suspend fun getChats(): Resource<List<User>> {
         return withContext(Dispatchers.IO) {
-            localChatRepository.getUsers()
+            remoteUserRepository.findUsers(0)
         }
     }
 
@@ -81,12 +79,12 @@ class ChatViewModel(
            }
        }
    */
-    class RoomChatViewModelFactory(
-        private val roomChatRepository: RoomUserDataSource,
+    class ChatViewModelFactory(
+        private val remoteUserRepository: RemoteUserDataSource,
         private val context: Context
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
-            return ChatViewModel(roomChatRepository, context) as T
+            return ChatViewModel(remoteUserRepository, context) as T
         }
 
     }

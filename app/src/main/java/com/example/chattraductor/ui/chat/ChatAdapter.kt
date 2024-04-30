@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chattraductor.data.model.User
 import com.example.chattraductor.databinding.FragmentChatBinding
+import com.example.chattraductor.databinding.ItemChatBinding
 
 class UserAdapter (
     private val onClickListener: (User) -> Unit
@@ -15,25 +16,26 @@ class UserAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding =
-            FragmentChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: UserAdapter.UserViewHolder, position: Int) {
-        val chat = getItem(position)
-        holder.bind(chat)
+        val user = getItem(position)
+        holder.bind(user)
 
         holder.itemView.setOnClickListener {
-            onClickListener(chat)
+            onClickListener(user)
         }
 
     }
 
-    inner class UserViewHolder(private val binding: FragmentChatBinding) :
+    inner class UserViewHolder(private val binding: ItemChatBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(chat: User) {
-
+        fun bind(user: User) {
+            binding.userName.text = user.name
+            binding.userPhoneNumber.text = user.phoneNumber1.toString()
         }
     }
 

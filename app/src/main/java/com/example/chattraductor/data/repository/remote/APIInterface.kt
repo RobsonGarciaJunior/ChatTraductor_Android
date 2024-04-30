@@ -3,7 +3,6 @@ package com.example.chattraductor.data.repository.remote
 import com.example.chattraductor.data.model.login.AuthRequest
 import com.example.chattraductor.data.model.Message
 import com.example.chattraductor.data.model.User
-import com.example.chattraductor.data.model.login.LoginUser
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,7 +13,7 @@ interface APIInterface {
 
     /*API HIBERNATE */
     @POST("auth/login")
-    suspend fun login(@Body authRequest: AuthRequest) : Response<LoginUser>
+    suspend fun login(@Body authRequest: AuthRequest) : Response<User>
     @GET("messages/findAll/{id}")
     suspend fun getMessages(@Path("id") messageId: Int?) : Response<List<Message>>
     @GET("messages/chat/{chatId}")

@@ -9,14 +9,14 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    const val API_URI = "${MyApp.API_SERVER}:${MyApp.API_PORT}/api/"
+    const val API_URI = "http://10.5.7.31:8063/api/"
     private val client = OkHttpClient.Builder().addInterceptor { chain ->
-        val authToken= MyApp.userPreferences.fetchAuthToken()
+        val authToken = MyApp.userPreferences.fetchAuthToken()
         val newRequest: Request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $authToken")
             .build()
         chain.proceed(newRequest)
-    }  .connectTimeout(15, TimeUnit.SECONDS)
+    }.connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .writeTimeout(15, TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)

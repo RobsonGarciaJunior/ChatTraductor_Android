@@ -17,8 +17,6 @@ class UserPreferences {
     companion object {
         const val USER_TOKEN = "user_token"
         const val USER_INFO = "user_info"
-        const val LOGGED_USER = "logged_user"
-        const val REMEMBER_ME = "remember_me"
     }
 
     fun saveAuthToken(token: String) {
