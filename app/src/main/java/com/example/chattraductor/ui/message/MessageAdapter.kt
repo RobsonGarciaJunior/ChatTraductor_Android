@@ -22,6 +22,9 @@ class MessageAdapter(
     private val onClickListener: (Message) -> Unit
 ) : ListAdapter<Message, MessageAdapter.MessageViewHolder>(MessageDiffCallback()) {
 
+    override fun submitList(list: List<Message>?) {
+        super.submitList(list?.sortedBy { it.id })
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val binding =
             ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
