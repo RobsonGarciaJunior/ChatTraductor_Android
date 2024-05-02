@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.ui.AppBarConfiguration
+import com.example.chattraductor.data.model.Message
 import com.example.chattraductor.data.model.User
 import com.example.chattraductor.data.repository.local.PopulateLocalDataBase
 import com.example.chattraductor.data.repository.local.PopulateLocalDataBaseFactory
@@ -76,7 +77,7 @@ class MessageActivity : AppCompatActivity() {
             if (messageAdapter.itemCount > 0) {
                 binding.messageList.scrollToPosition(messageAdapter.itemCount - 1)
             }
-        }, 200)
+        }, 50)
 
         messageViewModel.message.observe(this) {
             when (it.status) {
@@ -102,9 +103,11 @@ class MessageActivity : AppCompatActivity() {
                         messageViewModel.updateMessageList(chatter1, chatter2)
                     }
                 }
+
                 Resource.Status.ERROR -> {
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
+
                 Resource.Status.LOADING -> {
                 }
             }
@@ -145,6 +148,17 @@ class MessageActivity : AppCompatActivity() {
                 MyApp.userPreferences.mSocket.emit(
                     SocketEvents.ON_SEND_MESSAGE.value, jsonObject
                 )
+                val newMessage = chatter1?.id?.let { it1 ->
+                    chatter2.id?.let { it2 ->
+                        Message(
+                            0, message, it1,
+                            it2
+                        )
+                    }
+                }
+                if (newMessage != null) {
+                    messageViewModel.onSaveIncomingMessage(newMessage)
+                }
             }
         }
         startMessageService(this)
@@ -171,6 +185,15 @@ class MessageActivity : AppCompatActivity() {
     fun onMessageEvent(message: String) {
         populateLocalDataBase.toInit()
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSocketIncomingMessage(message: Message) {
+        Log.d("Hola", "Ta kbron")
+        if (chatter1 != null) {
+            messageViewModel.updateMessageList(chatter1, chatter2)
+        }
+    }
+
 
     private fun setDefaultData() {
         val receivedUser: User? = intent.getParcelableExtra("usuario Seleccionado")

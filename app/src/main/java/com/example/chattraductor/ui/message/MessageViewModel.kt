@@ -17,6 +17,7 @@ import com.example.chattraductor.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 
 class MessageViewModel(
     private val remoteMessageRepository: RemoteMessageRepository,
@@ -35,17 +36,42 @@ class MessageViewModel(
 
     fun updateMessageList(chatter1Id: User, chatter2Id: User) {
         viewModelScope.launch {
-            _message.value = chatter1Id.id?.let { chatter2Id.id?.let { it1 -> getMessagesFromChatters(it, it1) } }
+            _message.value = chatter1Id.id?.let {
+                chatter2Id.id?.let { it1 ->
+                    getMessagesFromChatters(
+                        it,
+                        it1
+                    )
+                }
+            }
         }
     }
 
-    private suspend fun getMessagesFromChatters(chatter1Id: Int, chatter2Id: Int): Resource<List<Message>> {
+    private suspend fun getMessagesFromChatters(
+        chatter1Id: Int,
+        chatter2Id: Int
+    ): Resource<List<Message>> {
         return withContext(Dispatchers.IO) {
             remoteMessageRepository.getMessagesFromChatters(chatter1Id, chatter2Id)
         }
     }
 
+    fun onSaveIncomingMessage(message: Message) {
+        viewModelScope.launch {
+            val newMessage = saveIncomingMessage(message)
+            Log.d("prueba2", "" + (newMessage.data?.text))
+            newMessage.status = Resource.Status.SUCCESS
+            _incomingMessage.value = newMessage
 
+        }
+    }
+
+    private suspend fun saveIncomingMessage(message: Message): Resource<Message> {
+        return withContext(Dispatchers.IO) {
+            val response = message
+            Resource.success(response)
+        }
+    }
 }
 
 class MessageViewModelFactory(
