@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.chattraductor.data.model.User
 import com.google.gson.Gson
-import java.net.Socket
+import io.socket.client.Socket
 
 class UserPreferences {
     private val sharedPreferences: SharedPreferences by lazy {
@@ -45,5 +45,12 @@ class UserPreferences {
         }
         return null
     }
+    fun removeData() {
+        val editor = sharedPreferences.edit()
+        editor.remove("user_token")
+        editor.remove("user_info")
+        editor.apply()
+    }
+
 
 }

@@ -10,8 +10,8 @@ class RemoteUserDataSource: BaseDataSource(), RemoteUserRepository{
         RetrofitClient.apiInterface.login(authRequest)
     }
 
-    override suspend fun findUsers(user: Int?): Resource<List<User>> = getResult {
-        RetrofitClient.apiInterface.findUsers(0)
+    override suspend fun findUsers(userId: Int?): Resource<List<User>> = getResult {
+        RetrofitClient.apiInterface.findUsers(userId)
     }
 
     override suspend fun getUserByChatId(idChat: Int): Resource<List<User>> {

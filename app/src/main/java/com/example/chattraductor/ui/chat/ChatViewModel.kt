@@ -1,6 +1,7 @@
 package com.example.chattraductor.ui.chat
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.chattraductor.data.model.Chat
 import com.example.chattraductor.data.model.User
-import com.example.chattraductor.data.repository.local.user.RoomUserDataSource
-import com.example.chattraductor.data.repository.remote.RemoteUserDataSource
+import com.example.chattraductor.data.repository.remote.RemoteUserRepository
 import com.example.chattraductor.utils.MyApp
 import com.example.chattraductor.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ChatViewModel(
-    private val remoteUserRepository: RemoteUserDataSource,
+    private val remoteUserRepository: RemoteUserRepository,
     private var context: Context
 ) : ViewModel() {
 
@@ -34,32 +34,34 @@ class ChatViewModel(
 
     private val _create = MutableLiveData<Resource<Chat>>()
     val create: LiveData<Resource<Chat>> get() = _create
-    
+
 
     private val _text = MutableLiveData<String>().apply {
         value = "CONTACTS"
     }
     val text: LiveData<String> = _text
 
-    init {
+    /*init {
         viewModelScope.launch {
-           _chat.value = getChats()
+            val userId = MyApp.userPreferences.getUser()?.id
+            _chat.value = userId?.let { getChats(it) }
         }
-    }
+    }*/
 
     fun updateChatList() {
         val userId = MyApp.userPreferences.getUser()?.id
+        Log.d("User", userId.toString())
         viewModelScope.launch {
             if (userId != null) {
-                _chat.value = getChats()
+                _chat.value = getChats(userId)
             }
 
         }
     }
 
-    private suspend fun getChats(): Resource<List<User>> {
+    private suspend fun getChats(userId: Int): Resource<List<User>> {
         return withContext(Dispatchers.IO) {
-            remoteUserRepository.findUsers(0)
+            remoteUserRepository.findUsers(userId)
         }
     }
 
@@ -80,7 +82,7 @@ class ChatViewModel(
        }
    */
     class ChatViewModelFactory(
-        private val remoteUserRepository: RemoteUserDataSource,
+        private val remoteUserRepository: RemoteUserRepository,
         private val context: Context
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

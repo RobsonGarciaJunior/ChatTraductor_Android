@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
                     if (userResource != null && userResource.status == Resource.Status.SUCCESS) {
                         val user = userResource.data
                         if (user != null) {
-                            MyApp.userPreferences.saveAuthToken(user.accessToken)
+                            user.accessToken?.let { it1 -> MyApp.userPreferences.saveAuthToken(it1) }
                             MyApp.userPreferences.saveUser(user)
                             Log.d("ChatFragment", "Datos cargados correctamente: ${it.data}")
                         }

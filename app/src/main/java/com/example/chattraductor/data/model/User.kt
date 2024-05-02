@@ -10,7 +10,7 @@ data class User(
     val name: String,
     val surname: String,
     val phoneNumber1: Long,
-    var accessToken: String = "",
+    var accessToken: String? = null
 ) : Parcelable {
     constructor(
         id: Int?,

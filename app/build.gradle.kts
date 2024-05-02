@@ -56,7 +56,10 @@ dependencies {
     //implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     //implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     val nav_version = "2.7.7"
+    implementation("io.socket:socket.io-client:2.0.0")
 
+    // para utilizar eventBus
+    implementation("org.greenrobot:eventbus:3.2.0")
     // Java language implementation
     implementation("androidx.navigation:navigation-fragment:$nav_version")
     implementation("androidx.navigation:navigation-ui:$nav_version")

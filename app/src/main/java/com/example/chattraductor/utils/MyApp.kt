@@ -32,4 +32,9 @@ class MyApp: Application() {
             .build()
 
     }
+    fun logoutUser() {
+        // Remove user token and info from preferences
+        userPreferences.removeData()
+    }
+
 }

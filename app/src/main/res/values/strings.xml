@@ -14,4 +14,5 @@
     <string name="email">Email\n</string>
     <string name="login">Login</string>
     <string name="contrase_a">Contrasenna</string>
+    <string name="mensaje">Message</string>
 </resources>
