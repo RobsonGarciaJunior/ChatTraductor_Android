@@ -1,6 +1,7 @@
 package com.example.chattraductor.ui.message
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,13 +35,13 @@ class MessageViewModel(
 
     fun updateMessageList(chatter1Id: User, chatter2Id: User) {
         viewModelScope.launch {
-            _message.value = chatter1Id.id?.let { chatter2Id.id?.let { it1 -> getMessages(it, it1) } }
+            _message.value = chatter1Id.id?.let { chatter2Id.id?.let { it1 -> getMessagesFromChatters(it, it1) } }
         }
     }
 
-    private suspend fun getMessages(chatter1Id: Int, chatter2Id: Int): Resource<List<Message>> {
+    private suspend fun getMessagesFromChatters(chatter1Id: Int, chatter2Id: Int): Resource<List<Message>> {
         return withContext(Dispatchers.IO) {
-            roomMessageRepository.getMessages(chatter1Id, chatter2Id)
+            remoteMessageRepository.getMessagesFromChatters(chatter1Id, chatter2Id)
         }
     }
 

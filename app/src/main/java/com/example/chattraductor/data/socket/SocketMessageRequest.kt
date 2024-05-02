@@ -2,5 +2,5 @@ package com.example.chattraductor.data.socket
 
 data class SocketMessageRequest(
     val message: String,
-    val receiverId: Integer
+    val receiverId: Int?
 )

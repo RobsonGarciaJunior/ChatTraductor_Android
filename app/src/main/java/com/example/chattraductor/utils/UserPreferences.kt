@@ -2,6 +2,7 @@ package com.example.chattraductor.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import com.example.chattraductor.data.model.User
 import com.google.gson.Gson
 import io.socket.client.Socket

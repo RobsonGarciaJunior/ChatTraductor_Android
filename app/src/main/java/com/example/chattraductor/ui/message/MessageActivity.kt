@@ -1,15 +1,33 @@
 package com.example.chattraductor.ui.message
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.ui.AppBarConfiguration
 import com.example.chattraductor.data.model.User
+import com.example.chattraductor.data.repository.local.PopulateLocalDataBase
+import com.example.chattraductor.data.repository.local.PopulateLocalDataBaseFactory
+import com.example.chattraductor.data.repository.local.chat.RoomChatDataSource
 import com.example.chattraductor.data.repository.local.message.RoomMessageDataSource
+import com.example.chattraductor.data.repository.local.user.RoomUserDataSource
 import com.example.chattraductor.data.repository.remote.RemoteMessageDataSource
+import com.example.chattraductor.data.repository.remote.RemoteUserDataSource
+import com.example.chattraductor.data.socket.SocketEvents
+import com.example.chattraductor.data.socket.SocketMessageRequest
 import com.example.chattraductor.databinding.MessageActivityBinding
 import com.example.chattraductor.utils.MyApp
+import com.example.chattraductor.utils.Resource
+import com.google.gson.Gson
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.json.JSONObject
+import java.util.Date
 
 class MessageActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -21,9 +39,24 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var chatter2: User
     private val messageViewModel: MessageViewModel by viewModels {
         MessageViewModelFactory(
+            remoteMessageRepository, roomMessageRepository, applicationContext
+        )
+    }
+
+    private val chatRepository = RoomChatDataSource()
+
+    private val messageRepository = RoomMessageDataSource()
+    //private val remoteMessageRepository = RemoteMessageDataSource()
+
+    private val userRepository = RoomUserDataSource()
+    private val remoteUserRepository = RemoteUserDataSource()
+    private val populateLocalDataBase: PopulateLocalDataBase by viewModels {
+        PopulateLocalDataBaseFactory(
+            chatRepository,
+            messageRepository,
             remoteMessageRepository,
-            roomMessageRepository,
-            applicationContext
+            userRepository,
+            remoteUserRepository
         )
     }
 
@@ -33,6 +66,110 @@ class MessageActivity : AppCompatActivity() {
         binding = MessageActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setDefaultData()
+
+        messageAdapter = MessageAdapter {
+            // Handle item click here
+        }
+        binding.messageList.adapter = messageAdapter
+
+        binding.messageList.postDelayed({
+            if (messageAdapter.itemCount > 0) {
+                binding.messageList.scrollToPosition(messageAdapter.itemCount - 1)
+            }
+        }, 200)
+
+        messageViewModel.message.observe(this) {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    Log.d("prueba3", "" + (it.data))
+                    messageAdapter.submitList(it.data)
+                }
+
+                Resource.Status.ERROR -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+
+                Resource.Status.LOADING -> {
+                }
+            }
+        }
+
+        messageViewModel.incomingMessage.observe(this) {
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    Log.d("prueba1", "" + (it.data?.text))
+                    if (chatter1 != null) {
+                        messageViewModel.updateMessageList(chatter1, chatter2)
+                    }
+                }
+                Resource.Status.ERROR -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+                Resource.Status.LOADING -> {
+                }
+            }
+        }
+        /*
+                messageViewModel.createLocalMessage.observe(this) {
+                    when (it.status) {
+                        Resource.Status.SUCCESS -> {
+                            val newList = ArrayList(messageAdapter.currentList)
+                            val newMessage = it.data
+                            newList.add(newMessage)
+
+                            messageAdapter.submitList(newList)
+
+                            if (newMessage?.id != null) {
+
+                            }
+
+                        }
+
+                        Resource.Status.ERROR -> {
+                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                        }
+
+                        Resource.Status.LOADING -> {
+                        }
+                    }
+                }
+                */
+        binding.include.send.setOnClickListener {
+            val message = binding.include.inputMessage.text.toString()
+            if (message.isNotBlank()) {
+                binding.include.inputMessage.setText("")
+                val socketMessage = SocketMessageRequest(
+                    message, chatter2.id
+                )
+                val jsonObject = JSONObject(Gson().toJson(socketMessage))
+                MyApp.userPreferences.mSocket.emit(
+                    SocketEvents.ON_SEND_MESSAGE.value, jsonObject
+                )
+            }
+        }
+        startMessageService(this)
+
+    }
+
+
+    private fun startMessageService(context: Context) {
+        val intent = Intent(context, MessageService::class.java)
+        ContextCompat.startForegroundService(context, intent)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(message: String) {
+        populateLocalDataBase.toInit()
     }
 
     private fun setDefaultData() {

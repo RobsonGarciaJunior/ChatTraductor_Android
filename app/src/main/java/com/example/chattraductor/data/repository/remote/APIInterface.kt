@@ -13,16 +13,25 @@ interface APIInterface {
 
     /*API HIBERNATE */
     @POST("auth/login")
-    suspend fun login(@Body authRequest: AuthRequest) : Response<User>
+    suspend fun login(@Body authRequest: AuthRequest): Response<User>
+
     @GET("messages/findAll/{id}")
-    suspend fun getMessages(@Path("id") messageId: Int?) : Response<List<Message>>
+    suspend fun getMessages(@Path("id") messageId: Int?): Response<List<Message>>
+
+    @GET("messages/findFromChatters/{chatter1}/{chatter2}")
+    suspend fun getMessagesFromChatters(@Path("chatter1")chatter1: Int,@Path("chatter2") chatter2: Int): Response<List<Message>>
+
     @GET("messages/chat/{chatId}")
-    suspend fun getMessageByChatId(@Path("chatId") idChat:Int) : Response<List<Message>>
+    suspend fun getMessageByChatId(@Path("chatId") idChat: Int): Response<List<Message>>
+
     @POST("messages")
-    suspend fun createMessage(@Body message: Message) : Response<Message>
+    suspend fun createMessage(@Body message: Message): Response<Message>
+
     @GET("users/find/{email}")
-    suspend fun getUserByEmail(@Path("email") email:String) : Response<Int>
+    suspend fun getUserByEmail(@Path("email") email: String): Response<Int>
+
     @GET("users/findAll/{id}")
-    suspend fun findUsers(@Path("id") userId: Int?) : Response<List<User>>
+    suspend fun findUsers(@Path("id") userId: Int?): Response<List<User>>
+
 
 }

@@ -1,5 +1,6 @@
 package com.example.chattraductor.ui.chat
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,10 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.chattraductor.R
 import com.example.chattraductor.data.model.Chat
 import com.example.chattraductor.data.model.User
@@ -24,8 +26,12 @@ import com.example.chattraductor.data.repository.remote.RemoteMessageDataSource
 import com.example.chattraductor.data.repository.remote.RemoteUserDataSource
 import com.example.chattraductor.databinding.FragmentChatBinding
 import com.example.chattraductor.ui.message.MessageActivity
+import com.example.chattraductor.ui.message.MessageService
 import com.example.chattraductor.utils.MyApp
 import com.example.chattraductor.utils.Resource
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class ChatFragment : Fragment() {
 
@@ -61,15 +67,13 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        /*
+    ): View {/*
         val chatViewModel = ViewModelProvider(
             this, ChatViewModel.ChatViewModelFactory(remoteUserRepository, requireContext())
         ).get(ChatViewModel::class.java)
 
          */
-        lateinit var chat: Chat
-        /*
+        lateinit var chat: Chat/*
                 val populateLocalDataBase = ViewModelProvider(
                     this, PopulateLocalDataBaseFactory(
                         chatRepository,
@@ -87,43 +91,20 @@ class ChatFragment : Fragment() {
         )
 
         binding.chatList.adapter = chatAdapter
-        //val loggedUser = MyApp.userPreferences.getUser()
         if (loggedUser != null) {
             chatViewModel.updateChatList()
             Log.d("User", "LOGGED USER:" + loggedUser.name + loggedUser.accessToken)
         } else {
             Toast.makeText(
-                requireContext(),
-                "Need to log in to see your contacts!",
-                Toast.LENGTH_LONG
+                requireContext(), "YOU NEED TO LOG IN TO SEE YOUR CHATS!", Toast.LENGTH_LONG
             ).show()
-            val navController = activity?.findNavController(R.id.nav_host_fragment_content_main)
-            navController?.navigate(R.id.nav_chat)
-
+            findNavController().navigate(R.id.nav_home)
         }
 
         val textView: TextView = binding.textChat
         chatViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-
-
-        /*
-                populateLocalDataBase.finish.observe(viewLifecycleOwner, Observer {
-                    when (it.status) {
-                        Resource.Status.SUCCESS -> {
-                            chatViewModel.updateChatList()
-                        }
-
-                        Resource.Status.ERROR -> {
-        //                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                        }
-
-                        Resource.Status.LOADING -> {
-                        }
-
-                    }
-                })*/
 
         chatViewModel.chat.observe(viewLifecycleOwner, Observer {
             Log.e("PruebasDia1", "ha ocurrido un cambio en la lista total")

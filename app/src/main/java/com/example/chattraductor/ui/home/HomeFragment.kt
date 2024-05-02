@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.chattraductor.MainActivity
 import com.example.chattraductor.R
 import com.example.chattraductor.data.repository.remote.RemoteUserDataSource
@@ -35,6 +36,8 @@ class HomeFragment : Fragment() {
     private val userRepository = RemoteUserDataSource()
     private lateinit var loginButton: Button
     private val handler = Handler(Looper.getMainLooper())
+    val loggedUser = MyApp.userPreferences.getUser()
+
     private val homeViewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(userRepository, requireContext())
     }
@@ -67,6 +70,7 @@ class HomeFragment : Fragment() {
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+
         binding.login.setOnClickListener {
 
             var email = binding.email.text.toString()
@@ -105,12 +109,14 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+        if (loggedUser != null) {
+            findNavController().navigate(R.id.nav_chat)
+        }
         return root
     }
 
     private fun redirectAfterLogin() {
-        val navController = activity?.findNavController(R.id.nav_host_fragment_content_main)
-        navController?.navigate(R.id.nav_chat)
+        findNavController().navigate(R.id.nav_chat)
     }
 
     private fun checkData(): Boolean {

@@ -4,6 +4,7 @@ import com.example.chattraductor.utils.Resource
 
 interface RemoteMessageRepository {
     suspend fun getMessages(messageId: Int?): Resource<List<Message>>
+    suspend fun getMessagesFromChatters(chatter1:Int, chatter2:Int): Resource<List<Message>>
     suspend fun getMessagesFromGroup(idGroup: Int) : Resource<List<Message>>
     suspend fun createMessage(message: Message) : Resource<Message>
 }
