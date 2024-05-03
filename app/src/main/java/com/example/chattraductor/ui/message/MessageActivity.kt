@@ -47,7 +47,6 @@ class MessageActivity : AppCompatActivity() {
     private val chatRepository = RoomChatDataSource()
 
     private val messageRepository = RoomMessageDataSource()
-    //private val remoteMessageRepository = RemoteMessageDataSource()
 
     private val userRepository = RoomUserDataSource()
     private val remoteUserRepository = RemoteUserDataSource()
@@ -112,31 +111,7 @@ class MessageActivity : AppCompatActivity() {
                 }
             }
         }
-        /*
-                messageViewModel.createLocalMessage.observe(this) {
-                    when (it.status) {
-                        Resource.Status.SUCCESS -> {
-                            val newList = ArrayList(messageAdapter.currentList)
-                            val newMessage = it.data
-                            newList.add(newMessage)
 
-                            messageAdapter.submitList(newList)
-
-                            if (newMessage?.id != null) {
-
-                            }
-
-                        }
-
-                        Resource.Status.ERROR -> {
-                            Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                        }
-
-                        Resource.Status.LOADING -> {
-                        }
-                    }
-                }
-                */
         binding.include.send.setOnClickListener {
             val message = binding.include.inputMessage.text.toString()
             if (message.isNotBlank()) {

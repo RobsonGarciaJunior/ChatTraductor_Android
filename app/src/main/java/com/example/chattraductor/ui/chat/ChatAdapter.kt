@@ -3,9 +3,11 @@ package com.example.chattraductor.ui.chat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chattraductor.R
 import com.example.chattraductor.data.model.User
 import com.example.chattraductor.databinding.FragmentChatBinding
 import com.example.chattraductor.databinding.ItemChatBinding

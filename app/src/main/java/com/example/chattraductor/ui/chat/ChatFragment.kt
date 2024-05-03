@@ -67,23 +67,8 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {/*
-        val chatViewModel = ViewModelProvider(
-            this, ChatViewModel.ChatViewModelFactory(remoteUserRepository, requireContext())
-        ).get(ChatViewModel::class.java)
+    ): View {
 
-         */
-        lateinit var chat: Chat/*
-                val populateLocalDataBase = ViewModelProvider(
-                    this, PopulateLocalDataBaseFactory(
-                        chatRepository,
-                        messageRepository,
-                        remoteMessageRepository,
-                        userRepository,
-                        remoteUserRepository
-                    )
-                ).get(PopulateLocalDataBase::class.java)
-          */
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         val root: View = binding.root
         chatAdapter = UserAdapter(
@@ -127,6 +112,7 @@ class ChatFragment : Fragment() {
                 }
             }
         })
+
         return root
     }
 
@@ -136,7 +122,6 @@ class ChatFragment : Fragment() {
         if (chatter2 != null) {
             goToMessages()
         }
-//        this.chat = chat
     }
 
     private fun goToMessages() {

@@ -13,8 +13,8 @@
         android:elevation="4dp"
         app:layout_collapseMode="pin"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:title=" "
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:backgroundTint="@color/blue_green">
 
         <LinearLayout
             android:id="@+id/linear_layout_title"

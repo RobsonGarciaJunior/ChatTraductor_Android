@@ -54,7 +54,7 @@ class MessageAdapter(
 
         private fun setMessageFormat(message: Message) {
             if (MyApp.userPreferences.getUser()?.id == message.senderId) {
-                binding.name.visibility = View.GONE
+                //binding.name.visibility = View.GONE
                /* if (message.saved !== null) {
                     binding.sentHour.text = parseDate(message.sent)
                 } else {
@@ -75,7 +75,7 @@ class MessageAdapter(
                 val drawable = ContextCompat.getDrawable(context, R.drawable.background_received)
                 binding.linearLayout1.background = drawable
 
-                binding.name.text = message.receiverId.toString()
+                //binding.name.text = message.receiverId.toString()
 
                 //binding.sentHour.text = message.saved?.let { parseDate(it) }
 

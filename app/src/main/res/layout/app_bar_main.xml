@@ -16,14 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.ChatTraductor.PopupOverlay" />
+            app:popupTheme="@style/Theme.ChatTraductor.PopupOverlay"
+            android:backgroundTint="@color/blue_green"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
         layout="@layout/content_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

@@ -37,16 +37,10 @@ class ChatViewModel(
 
 
     private val _text = MutableLiveData<String>().apply {
-        value = "CONTACTS"
+        value = "MY CONTACTS"
     }
     val text: LiveData<String> = _text
 
-    /*init {
-        viewModelScope.launch {
-            val userId = MyApp.userPreferences.getUser()?.id
-            _chat.value = userId?.let { getChats(it) }
-        }
-    }*/
 
     fun updateChatList() {
         val userId = MyApp.userPreferences.getUser()?.id
