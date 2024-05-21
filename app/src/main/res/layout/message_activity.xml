@@ -23,6 +23,15 @@
             android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
+            <ImageView
+                android:id="@+id/contactImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/contact_image"
+                android:src="@drawable/baseline_person_24" />
+
             <TextView
                 android:id="@+id/configuration_title"
                 android:layout_width="wrap_content"

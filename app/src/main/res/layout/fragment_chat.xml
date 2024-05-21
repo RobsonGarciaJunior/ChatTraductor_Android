@@ -34,14 +34,15 @@
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_personal_configuration" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:padding="8dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:background="@android:color/white"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@+id/text_chat"/>
-
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/text_chat"
+       />
 </androidx.constraintlayout.widget.ConstraintLayout>
